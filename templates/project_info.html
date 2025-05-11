@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Detailed information about the Student Performance Prediction project, including methodology, dataset, and performance metrics.">
+    <meta name="keywords" content="student performance, prediction, machine learning, SVM, Flask, education">
+    <meta name="author" content="Sohail Ahmed">
+    <title>Project Information - Student Performance Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-graduation-cap me-2"></i>Student Prediction</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Prediction Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/project-info">Project Information</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-overlay">
+            <h1 class="animate__animated animate__fadeInDown">Project Information</h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                Learn about the Student Performance Prediction system, its methodology, and performance.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <div class="project-info animate__animated animate__fadeIn">
+            <!-- Project Overview -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-info-circle me-2"></i>Project Overview</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>
+                            The Student Performance Prediction project aims to predict whether a student will pass or fail a course based on various personal, academic, and lifestyle factors. Using a Support Vector Machine (SVM) with a linear kernel, the system provides a probability score and categorizes the likelihood of passing into Low (<40%), Medium (40-70%), or High (>70%).
+                        </p>
+                        <p>
+                            Built with Flask, the web interface allows users to input 30 features about a student and receive real-time predictions. The project integrates MySQL for data storage and uses Python libraries like scikit-learn, pandas, and matplotlib for modeling and visualization.
+                        </p>
+                        <p><strong>Objective:</strong> Assist educators and students in identifying at-risk students early, enabling targeted interventions to improve academic outcomes.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dataset Description -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-database me-2"></i>Dataset Description</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>
+                            The project uses the <a href="https://drive.google.com/file/d/15klmmPYjOwDf8x2OVG1Ni3k6RYdWqALS/view?usp=sharing" target="_blank">Student Performance Dataset</a> from the UCI Machine Learning Repository. It contains data on 395 students from two Portuguese schools, collected during the 2005-2006 school year.
+                        </p>
+                        <h4>Key Features (30):</h4>
+                        <ul>
+                            <li><strong>Personal:</strong> school, sex, age, address, family size, parent's cohabitation status, mother's/father's education, mother's/father's job, reason for choosing school, guardian.</li>
+                            <li><strong>Academic:</strong> travel time, study time, past failures, extra educational support, family support, paid classes, activities, nursery school, desire for higher education, internet access.</li>
+                            <li><strong>Lifestyle:</strong> romantic relationship, family relationship quality, free time, going out, workday/weekend alcohol consumption, health, absences.</li>
+                            <li><strong>Target:</strong> passing percentage (eg. 55%), passing category (eg. medium) .</li>
+                        </ul>
+                        <p><strong>Dataset Size:</strong> 395 rows, 31 columns (30 features + target).</p>
+                        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#featureDetails"
+                                aria-expanded="false" aria-controls="featureDetails">
+                            View Feature Details
+                        </button>
+                        <div class="collapse mt-3" id="featureDetails">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Description</th>
+                                        <th>Values</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>school</td>
+                                        <td>Student's school</td>
+                                        <td>GP, MS</td>
+                                    </tr>
+                                    <tr>
+                                        <td>sex</td>
+                                        <td>Student's gender</td>
+                                        <td>M, F</td>
+                                    </tr>
+                                    <tr>
+                                        <td>age</td>
+                                        <td>Student's age</td>
+                                        <td>15-22</td>
+                                    </tr>
+                                    <tr>
+                                        <td>address</td>
+                                        <td>Urban or rural residence</td>
+                                        <td>U, R</td>
+                                    </tr>
+                                    <tr>
+                                        <td>famsize</td>
+                                        <td>Family size</td>
+                                        <td>LE3 (≤3), GT3 (>3)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pstatus</td>
+                                        <td>Parent's cohabitation status</td>
+                                        <td>T (together), A (apart)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Medu</td>
+                                        <td>Mother's education</td>
+                                        <td>0: None, 1: Primary, 2: 5th-9th, 3: Secondary, 4: Higher</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fedu</td>
+                                        <td>Father's education</td>
+                                        <td>0: None, 1: Primary, 2: 5th-9th, 3: Secondary, 4: Higher</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mjob</td>
+                                        <td>Mother's job</td>
+                                        <td>teacher, health, services, at_home, other</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fjob</td>
+                                        <td>Father's job</td>
+                                        <td>teacher, health, services, at_home, other</td>
+                                    </tr>
+                                    <tr>
+                                        <td>reason</td>
+                                        <td>Reason for choosing school</td>
+                                        <td>home, reputation, course, other</td>
+                                    </tr>
+                                    <tr>
+                                        <td>guardian</td>
+                                        <td>Student's guardian</td>
+                                        <td>mother, father, other</td>
+                                    </tr>
+                                    <tr>
+                                        <td>traveltime</td>
+                                        <td>Travel time to school</td>
+                                        <td>1: <15 min, 2: 15-30 min, 3: 30-60 min, 4: >60 min</td>
+                                    </tr>
+                                    <tr>
+                                        <td>studytime</td>
+                                        <td>Weekly study time</td>
+                                        <td>1: <2h, 2: 2-5h, 3: 5-10h, 4: >10h</td>
+                                    </tr>
+                                    <tr>
+                                        <td>failures</td>
+                                        <td>Past class failures</td>
+                                        <td>0-4</td>
+                                    </tr>
+                                    <tr>
+                                        <td>schoolsup</td>
+                                        <td>Extra educational support</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>famsup</td>
+                                        <td>Family educational support</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>paid</td>
+                                        <td>Extra paid classes</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>activities</td>
+                                        <td>Extra-curricular activities</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>nursery</td>
+                                        <td>Attended nursery school</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>higher</td>
+                                        <td>Wants higher education</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>internet</td>
+                                        <td>Internet access at home</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>romantic</td>
+                                        <td>In a romantic relationship</td>
+                                        <td>yes, no</td>
+                                    </tr>
+                                    <tr>
+                                        <td>famrel</td>
+                                        <td>Family relationship quality</td>
+                                        <td>1: Very bad, 5: Excellent</td>
+                                    </tr>
+                                    <tr>
+                                        <td>freetime</td>
+                                        <td>Free time after school</td>
+                                        <td>1: Very low, 5: Very high</td>
+                                    </tr>
+                                    <tr>
+                                        <td>goout</td>
+                                        <td>Going out with friends</td>
+                                        <td>1: Very low, 5: Very high</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dalc</td>
+                                        <td>Workday alcohol consumption</td>
+                                        <td>1: Very low, 5: Very high</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Walc</td>
+                                        <td>Weekend alcohol consumption</td>
+                                        <td>1: Very low, 5: Very high</td>
+                                    </tr>
+                                    <tr>
+                                        <td>health</td>
+                                        <td>Health status</td>
+                                        <td>1: Very bad, 5: Very good</td>
+                                    </tr>
+                                    <tr>
+                                        <td>absences</td>
+                                        <td>Number of absences</td>
+                                        <td>0-93</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Methodology -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-cogs me-2"></i>Methodology</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4>Data Preprocessing</h4>
+                        <ul>
+                            <li><strong>Categorical Encoding:</strong> Converted categorical features (e.g., school, sex) to numerical values using mapping dictionaries.</li>
+                            <li><strong>Feature Scaling:</strong> Normalized features with large ranges (e.g., absences) using mean normalization and small ranges (e.g., studytime) using min-max scaling.</li>
+                            <li><strong>Data Splitting:</strong> Split dataset into training (60%), validation (20%), and test (20%) sets with a random state of 388628375.</li>
+                        </ul>
+                        <h4>Model Training</h4>
+                        <ul>
+                            <li><strong>Algorithm:</strong> Support Vector Machine (SVM) with a linear kernel.</li>
+                            <li><strong>Hyperparameter Tuning:</strong> Optimized the regularization parameter C using validation error minimization over values [0.0001, 0.001, 0.01, 0.05, 0.1, 4, 10, 40, 100].</li>
+                            <li><strong>Training Time:</strong> Approximately 74ms on the training set.</li>
+                        </ul>
+                        <h4>Prediction</h4>
+                        <ul>
+                            <li><strong>Probability Output:</strong> Computes the probability of passing using SVM's predict_proba method.</li>
+                            <li><strong>Category Assignment:</strong> Low (<40%), Medium (40-70%), High (>70%).</li>
+                            <li><strong>Web Interface:</strong> Flask-based form collects 30 features, processes them, and displays predictions.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Model Details -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-brain me-2"></i>Model Details</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>
+                            The model is a Support Vector Machine (SVM) with a linear kernel, chosen for its effectiveness in binary classification tasks with moderate-sized datasets. The linear kernel ensures interpretability and computational efficiency.
+                        </p>
+                        <ul>
+                            <li><strong>Input Features:</strong> 30 features (personal, academic, lifestyle).</li>
+                            <li><strong>Output:</strong> Probability of passing (0-100%) and category (Low, Medium, High).</li>
+                            <li><strong>Regularization Parameter (C):</strong> Optimized via cross-validation.</li>
+                            <li><strong>Training Data:</strong> 237 samples (60% of 395).</li>
+                            <li><strong>Validation Data:</strong> 79 samples (20%).</li>
+                            <li><strong>Test Data:</strong> 79 samples (20%).</li>
+                        </ul>
+                        <p>
+                            The model is saved as <code>svm_model.joblib</code> and loaded for predictions, ensuring fast inference (~1ms per prediction).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Performance Metrics -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-chart-bar me-2"></i>Performance Metrics</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>The model was evaluated on the test set (79 samples) with the following metrics:</p>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Accuracy</td>
+                                    <td>84%</td>
+                                </tr>
+                                <tr>
+                                    <td>F1 Score (Macro)</td>
+                                    <td>0.82</td>
+                                </tr>
+                                <tr>
+                                    <td>ROC AUC Score</td>
+                                    <td>0.80</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>Classification Report</h4>
+                        <pre class="bg-light p-3 rounded">
+                            precision    recall  f1-score   support
+               0.0       0.88      0.65      0.75        23
+               1.0       0.83      0.95      0.89        41
+        accuracy                           0.84        64
+       macro avg       0.86      0.80      0.82        64
+    weighted avg       0.85      0.84      0.84        64
+                        </pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualizations -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-chart-line me-2"></i>Visualizations</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p>Below are key visualizations illustrating the model's performance and feature importance.</p>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h4>Feature Importance</h4>
+                                <img src="{{ url_for('static', filename='plots/feature_importance.png') }}"
+                                     alt="Feature Importance Plot" class="img-fluid rounded shadow plot-img"
+                                     data-bs-toggle="modal" data-bs-target="#featureImportanceModal">
+                                <p class="mt-2">Shows the relative importance of features based on SVM coefficients.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>ROC Curve</h4>
+                                <img src="{{ url_for('static', filename='plots/roc_curve.png') }}"
+                                     alt="ROC Curve Plot" class="img-fluid rounded shadow plot-img"
+                                     data-bs-toggle="modal" data-bs-target="#rocCurveModal">
+                                <p class="mt-2">Illustrates the trade-off between true positive and false positive rates (AUC = 0.80).</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Confusion Matrix</h4>
+                                <img src="{{ url_for('static', filename='plots/confusion_matrix.png') }}"
+                                     alt="Confusion Matrix Plot" class="img-fluid rounded shadow plot-img"
+                                     data-bs-toggle="modal" data-bs-target="#confusionMatrixModal">
+                                <p class="mt-2">Shows the model's classification performance (true vs. predicted labels).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modals for Zoomed Plots -->
+                <div class="modal fade" id="featureImportanceModal" tabindex="-1" aria-labelledby="featureImportanceModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="featureImportanceModalLabel">Feature Importance</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ url_for('static', filename='plots/feature_importance.png') }}"
+                                     alt="Feature Importance Plot" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="rocCurveModal" tabindex="-1" aria-labelledby="rocCurveModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rocCurveModalLabel">ROC Curve</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ url_for('static', filename='plots/roc_curve.png') }}"
+                                     alt="ROC Curve Plot" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="confusionMatrixModal" tabindex="-1" aria-labelledby="confusionMatrixModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confusionMatrixModalLabel">Confusion Matrix</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="{{ url_for('static', filename='plots/confusion_matrix.png') }}"
+                                     alt="Confusion Matrix Plot" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contributors -->
+            <section class="mb-5">
+                <h2 class="section-title"><i class="fas fa-user me-2"></i>Contributors</h2>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <p><strong>Sohail Ahmed</strong> - Lead Developer</p>
+                        <ul>
+                            <li>Designed and implemented the SVM model and preprocessing pipeline.</li>
+                            <li>Developed the Flask web application with animated UI.</li>
+                            <li>Integrated MySQL database and created visualizations.</li>
+                        </ul>
+                        <p><strong>Contact:</strong> <a href="https://www.linkedin.com/in/sohail-ahmed-83362925b/" target="_blank">https://www.linkedin.com/in/sohail-ahmed-83362925b/</a></p>
+                        <p><strong>Project GitHub:</strong> <a href="https://github.com/YOUR_GITHUB_PROJECT_LINK" target="_blank">https://github.com/YOUR_GITHUB_PROJECT_LINK</a></p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <p>© 2025 Student Performance Prediction. Created by Sohail Ahmed.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Animation Trigger
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.project-info section');
+            sections.forEach((section, index) => {
+                section.style.animationDelay = `${index * 0.2}s`;
+                section.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+
+            // Smooth Scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

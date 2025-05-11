@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Predict student performance with an interactive and animated web interface.">
+    <meta name="keywords" content="student performance, prediction, machine learning, Flask, education">
+    <meta name="author" content="Sohail Ahmed">
+    <title>Student Performance Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/"><i class="fas fa-graduation-cap me-2"></i>Student Prediction</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Prediction Form</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/project-info">Project Information</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-overlay">
+            <h1 class="animate__animated animate__fadeInDown">Student Performance Prediction</h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s">
+                Discover the likelihood of academic success with our AI-powered tool.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container my-5">
+        <form method="POST" class="prediction-form" id="predictionForm" aria-label="Student Prediction Form">
+            <div class="row g-4">
+                <!-- Personal Information -->
+                <div class="col-lg-6">
+                    <h2 class="section-title animate__animated animate__fadeInLeft">Personal Information</h2>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.2s">
+                        <label for="school" class="form-label"><i class="fas fa-school me-2"></i>School</label>
+                        <select name="school" id="school" class="form-select" required aria-describedby="schoolTooltip">
+                            <option value="" disabled selected>Select School</option>
+                            <option value="GP">GP</option>
+                            <option value="MS">MS</option>
+                        </select>
+                        <div class="tooltip-custom" id="schoolTooltip">Choose the student's school (GP or MS).</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.3s">
+                        <label for="sex" class="form-label"><i class="fas fa-venus-mars me-2"></i>Sex</label>
+                        <select name="sex" id="sex" class="form-select" required aria-describedby="sexTooltip">
+                            <option value="" disabled selected>Select Sex</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                        <div class="tooltip-custom" id="sexTooltip">Select the student's gender.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.4s">
+                        <label for="age" class="form-label"><i class="fas fa-user me-2"></i>Age (15-22)</label>
+                        <input type="number" name="age" id="age" class="form-control" min="15" max="22" required
+                               aria-describedby="ageTooltip" placeholder="Enter age">
+                        <div class="tooltip-custom" id="ageTooltip">Student's age between 15 and 22.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.5s">
+                        <label for="address" class="form-label"><i class="fas fa-home me-2"></i>Address</label>
+                        <select name="address" id="address" class="form-select" required aria-describedby="addressTooltip">
+                            <option value="" disabled selected>Select Address</option>
+                            <option value="U">Urban</option>
+                            <option value="R">Rural</option>
+                        </select>
+                        <div class="tooltip-custom" id="addressTooltip">Urban or rural residence.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.6s">
+                        <label for="famsize" class="form-label"><i class="fas fa-users me-2"></i>Family Size</label>
+                        <select name="famsize" id="famsize" class="form-select" required aria-describedby="famsizeTooltip">
+                            <option value="" disabled selected>Select Family Size</option>
+                            <option value="LE3">Less or equal to 3</option>
+                            <option value="GT3">Greater than 3</option>
+                        </select>
+                        <div class="tooltip-custom" id="famsizeTooltip">Family size (≤3 or >3 members).</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.7s">
+                        <label for="Pstatus" class="form-label"><i class="fas fa-user-friends me-2"></i>Parent's Cohabitation Status</label>
+                        <select name="Pstatus" id="Pstatus" class="form-select" required aria-describedby="PstatusTooltip">
+                            <option value="" disabled selected>Select Status</option>
+                            <option value="T">Together</option>
+                            <option value="A">Apart</option>
+                        </select>
+                        <div class="tooltip-custom" id="PstatusTooltip">Parents living together or apart.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.8s">
+                        <label for="Medu" class="form-label"><i class="fas fa-graduation-cap me-2"></i>Mother's Education (0-4)</label>
+                        <input type="number" name="Medu" id="Medu" class="form-control" min="0" max="4" required
+                               aria-describedby="MeduTooltip" placeholder="Enter education level">
+                        <div class="tooltip-custom" id="MeduTooltip">0: None, 1: Primary, 2: 5th-9th, 3: Secondary, 4: Higher.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.9s">
+                        <label for="Fedu" class="form-label"><i class="fas fa-graduation-cap me-2"></i>Father's Education (0-4)</label>
+                        <input type="number" name="Fedu" id="Fedu" class="form-control" min="0" max="4" required
+                               aria-describedby="FeduTooltip" placeholder="Enter education level">
+                        <div class="tooltip-custom" id="FeduTooltip">0: None, 1: Primary, 2: 5th-9th, 3: Secondary, 4: Higher.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1s">
+                        <label for="Mjob" class="form-label"><i class="fas fa-briefcase me-2"></i>Mother's Job</label>
+                        <select name="Mjob" id="Mjob" class="form-select" required aria-describedby="MjobTooltip">
+                            <option value="" disabled selected>Select Job</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="health">Health</option>
+                            <option value="services">Services</option>
+                            <option value="at_home">At Home</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="tooltip-custom" id="MjobTooltip">Mother's occupation.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.1s">
+                        <label for="Fjob" class="form-label"><i class="fas fa-briefcase me-2"></i>Father's Job</label>
+                        <select name="Fjob" id="Fjob" class="form-select" required aria-describedby="FjobTooltip">
+                            <option value="" disabled selected>Select Job</option>
+                            <option value="teacher">Teacher</option>
+                            <option value="health">Health</option>
+                            <option value="services">Services</option>
+                            <option value="at_home">At Home</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="tooltip-custom" id="FjobTooltip">Father's occupation.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.2s">
+                        <label for="reason" class="form-label"><i class="fas fa-question-circle me-2"></i>Reason for Choosing School</label>
+                        <select name="reason" id="reason" class="form-select" required aria-describedby="reasonTooltip">
+                            <option value="" disabled selected>Select Reason</option>
+                            <option value="home">Close to Home</option>
+                            <option value="reputation">School Reputation</option>
+                            <option value="course">Course Preference</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="tooltip-custom" id="reasonTooltip">Why the student chose this school.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.3s">
+                        <label for="guardian" class="form-label"><i class="fas fa-user-shield me-2"></i>Guardian</label>
+                        <select name="guardian" id="guardian" class="form-select" required aria-describedby="guardianTooltip">
+                            <option value="" disabled selected>Select Guardian</option>
+                            <option value="mother">Mother</option>
+                            <option value="father">Father</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="tooltip-custom" id="guardianTooltip">Primary guardian of the student.</div>
+                    </div>
+                </div>
+
+                <!-- Academic and Lifestyle -->
+                <div class="col-lg-6">
+                    <h2 class="section-title animate__animated animate__fadeInRight">Academic & Lifestyle</h2>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.2s">
+                        <label for="traveltime" class="form-label"><i class="fas fa-bus me-2"></i>Travel Time to School (1-4)</label>
+                        <input type="number" name="traveltime" id="traveltime" class="form-control" min="1" max="4" required
+                               aria-describedby="traveltimeTooltip" placeholder="Enter travel time">
+                        <div class="tooltip-custom" id="traveltimeTooltip">1: <15 min, 2: 15-30 min, 3: 30-60 min, 4: >60 min.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.3s">
+                        <label for="studytime" class="form-label"><i class="fas fa-book me-2"></i>Weekly Study Time (1-4)</label>
+                        <input type="number" name="studytime" id="studytime" class="form-control" min="1" max="4" required
+                               aria-describedby="studytimeTooltip" placeholder="Enter study time">
+                        <div class="tooltip-custom" id="studytimeTooltip">1: <2h, 2: 2-5h, 3: 5-10h, 4: >10h.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.4s">
+                        <label for="failures" class="form-label"><i class="fas fa-exclamation-triangle me-2"></i>Past Class Failures (0-4)</label>
+                        <input type="number" name="failures" id="failures" class="form-control" min="0" max="4" required
+                               aria-describedby="failuresTooltip" placeholder="Enter failures">
+                        <div class="tooltip-custom" id="failuresTooltip">Number of past class failures.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.5s">
+                        <label for="schoolsup" class="form-label"><i class="fas fa-chalkboard-teacher me-2"></i>Extra Educational Support</label>
+                        <select name="schoolsup" id="schoolsup" class="form-select" required aria-describedby="schoolsupTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="schoolsupTooltip">Receives extra school support.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.6s">
+                        <label for="famsup" class="form-label"><i class="fas fa-home me-2"></i>Family Educational Support</label>
+                        <select name="famsup" id="famsup" class="form-select" required aria-describedby="famsupTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="famsupTooltip">Receives family educational support.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.7s">
+                        <label for="paid" class="form-label"><i class="fas fa-money-bill me-2"></i>Extra Paid Classes</label>
+                        <select name="paid" id="paid" class="form-select" required aria-describedby="paidTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="paidTooltip">Attends extra paid classes.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.8s">
+                        <label for="activities" class="form-label"><i class="fas fa-futbol me-2"></i>Extra-Curricular Activities</label>
+                        <select name="activities" id="activities" class="form-select" required aria-describedby="activitiesTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="activitiesTooltip">Participates in extra-curricular activities.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="0.9s">
+                        <label for="nursery" class="form-label"><i class="fas fa-baby me-2"></i>Attended Nursery School</label>
+                        <select name="nursery" id="nursery" class="form-select" required aria-describedby="nurseryTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="nurseryTooltip">Attended nursery school.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1s">
+                        <label for="higher" class="form-label"><i class="fas fa-university me-2"></i>Wants Higher Education</label>
+                        <select name="higher" id="higher" class="form-select" required aria-describedby="higherTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="higherTooltip">Intends to pursue higher education.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.1s">
+                        <label for="internet" class="form-label"><i class="fas fa-wifi me-2"></i>Internet Access at Home</label>
+                        <select name="internet" id="internet" class="form-select" required aria-describedby="internetTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="internetTooltip">Has internet access at home.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.2s">
+                        <label for="romantic" class="form-label"><i class="fas fa-heart me-2"></i>In a Romantic Relationship</label>
+                        <select name="romantic" id="romantic" class="form-select" required aria-describedby="romanticTooltip">
+                            <option value="" disabled selected>Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                        <div class="tooltip-custom" id="romanticTooltip">Currently in a romantic relationship.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.3s">
+                        <label for="famrel" class="form-label"><i class="fas fa-users me-2"></i>Family Relationship Quality (1-5)</label>
+                        <input type="number" name="famrel" id="famrel" class="form-control" min="1" max="5" required
+                               aria-describedby="famrelTooltip" placeholder="Enter quality">
+                        <div class="tooltip-custom" id="famrelTooltip">1: Very bad, 5: Excellent.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.4s">
+                        <label for="freetime" class="form-label"><i class="fas fa-clock me-2"></i>Free Time After School (1-5)</label>
+                        <input type="number" name="freetime" id="freetime" class="form-control" min="1" max="5" required
+                               aria-describedby="freetimeTooltip" placeholder="Enter free time">
+                        <div class="tooltip-custom" id="freetimeTooltip">1: Very low, 5: Very high.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.5s">
+                        <label for="goout" class="form-label"><i class="fas fa-users me-2"></i>Going Out with Friends (1-5)</label>
+                        <input type="number" name="goout" id="goout" class="form-control" min="1" max="5" required
+                               aria-describedby="gooutTooltip" placeholder="Enter frequency">
+                        <div class="tooltip-custom" id="gooutTooltip">1: Very low, 5: Very high.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.6s">
+                        <label for="Dalc" class="form-label"><i class="fas fa-wine-glass me-2"></i>Workday Alcohol Consumption (1-5)</label>
+                        <input type="number" name="Dalc" id="Dalc" class="form-control" min="1" max="5" required
+                               aria-describedby="DalcTooltip" placeholder="Enter consumption">
+                        <div class="tooltip-custom" id="DalcTooltip">1: Very low, 5: Very high.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.7s">
+                        <label for="Walc" class="form-label"><i class="fas fa-wine-bottle me-2"></i>Weekend Alcohol Consumption (1-5)</label>
+                        <input type="number" name="Walc" id="Walc" class="form-control" min="1" max="5" required
+                               aria-describedby="WalcTooltip" placeholder="Enter consumption">
+                        <div class="tooltip-custom" id="WalcTooltip">1: Very low, 5: Very high.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.8s">
+                        <label for="health" class="form-label"><i class="fas fa-heartbeat me-2"></i>Health Status (1-5)</label>
+                        <input type="number" name="health" id="health" class="form-control" min="1" max="5" required
+                               aria-describedby="healthTooltip" placeholder="Enter health status">
+                        <div class="tooltip-custom" id="healthTooltip">1: Very bad, 5: Very good.</div>
+                    </div>
+                    <div class="form-group mb-4 animate__animated animate__fadeIn" data-animate-delay="1.9s">
+                        <label for="absences" class="form-label"><i class="fas fa-calendar-times me-2"></i>Number of Absences (0-93)</label>
+                        <input type="number" name="absences" id="absences" class="form-control" min="0" max="93" required
+                               aria-describedby="absencesTooltip" placeholder="Enter absences">
+                        <div class="tooltip-custom" id="absencesTooltip">Total school absences.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-predict" id="predictButton">
+                    <span class="btn-text">Predict Now</span>
+                    <span class="btn-spinner d-none"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            </div>
+        </form>
+
+        <!-- Prediction Result -->
+        {% if prediction %}
+        <div class="result-section mt-5 animate__animated animate__bounceIn" id="resultSection">
+            <h3 class="result-title"> Prediction Result </h3>
+            {% if prediction.error %}
+            <p class="text-danger result-error"><i class="fas fa-exclamation-circle me-2"></i> Error: {{ prediction.error }}</p>
+            {% else %}
+            <p class="result-probability"><i class="fas fa-chart-line me-2"></i><strong> Probability of Passing: </strong> {{ prediction.probability }}</p>
+            <p class="result-category"><i class="fas fa-tag me-2"></i><strong> Category: </strong> {{ prediction.category }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <p>© 2025 Student Performance Prediction. Created by Sohail Ahmed.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form Animation Trigger
+        document.addEventListener('DOMContentLoaded', () => {
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                const delay = group.getAttribute('data-animate-delay') || '0s';
+                group.style.animationDelay = delay;
+            });
+
+            // Submit Button Animation
+            const predictButton = document.querySelector('#predictButton');
+            const form = document.querySelector('#predictionForm');
+            form.addEventListener('submit', () => {
+                predictButton.querySelector('.btn-text').classList.add('d-none');
+                predictButton.querySelector('.btn-spinner').classList.remove('d-none');
+                predictButton.disabled = true;
+                setTimeout(() => {
+                    predictButton.disabled = false;
+                    predictButton.querySelector('.btn-text').classList.remove('d-none');
+                    predictButton.querySelector('.btn-spinner').classList.add('d-none');
+                }, 3000); // Simulate loading
+            });
+        });
+
+        // Smooth Scroll for Accessibility
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
