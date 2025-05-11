@@ -5,13 +5,13 @@ import numpy as np
 import pandas as pd
 import joblib
 import os
-
+from sklearn.impute import SimpleImputer
 
 def numerical_data(df):
-    """Map categorical string values to numerical values."""
+    """Map categorical string values to numerical values and handle missing values."""
     mappings = {
         'school': {'GP': 0, 'MS': 1},
-        'sex': {'M': 0, 'F': 1},
+        'gender': {'M': 0, 'F': 1},
         'address': {'U': 0, 'R': 1},
         'famsize': {'LE3': 0, 'GT3': 1},
         'Pstatus': {'T': 0, 'A': 1},
@@ -29,26 +29,40 @@ def numerical_data(df):
         'romantic': {'no': 0, 'yes': 1}
     }
     df = df.copy()
+    # Map categorical columns
     for column, mapping in mappings.items():
         if column in df.columns:
-            df[column] = df[column].map(mapping)
+            df[column] = df[column].astype(str).map(lambda x: mapping.get(x.lower(), 0))
+    # Convert numerical columns to numeric type
+    numerical_cols = ['age', 'Medu', 'Fedu', 'traveltime', 'studytime', 'failures', 'famrel',
+                      'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences']
+    for col in numerical_cols:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)  # Convert to numeric, default to 0 for NaN
+    # Ensure any remaining columns are numeric (e.g., 'passed' might be 'yes'/'no' in the CSV)
+    for col in df.columns:
+        if col not in mappings and col not in numerical_cols and col != 'passed':
+            df[col] = pd.to_numeric(df[col], errors='coerce').fillna(0)
+        elif col == 'passed' and df[col].dtype == 'object':
+            df[col] = df[col].map({'no': 0, 'yes': 1}).fillna(0)
     return df
 
-
 def feature_scaling(df, scaler_params):
-    """Scale features to normalize data."""
+    """Scale features to normalize data and handle NaN values."""
     df = df.copy()
-    for i in df:
-        col = df[i]
+    imputer = SimpleImputer(strategy='mean')  # Impute with mean for scaling
+    for i in df.columns:
+        col = df[i].values.reshape(-1, 1)
         if i in scaler_params['large']:
             Max, mean = scaler_params['large'][i]
+            col = imputer.fit_transform(col)
             col = (col - mean) / Max
         elif i in scaler_params['small']:
             min_val, max_val = scaler_params['small'][i]
-            col = (col - min_val) / max_val
-        df[i] = col
+            col = imputer.fit_transform(col)
+            col = (col - min_val) / (max_val - min_val) if (max_val - min_val) != 0 else col
+        df[i] = col.ravel()
     return df
-
 
 def load_model_and_params(model_file='svm_model.joblib'):
     """Load the trained SVM model and scaler parameters."""
@@ -63,26 +77,25 @@ def load_model_and_params(model_file='svm_model.joblib'):
     # Exclude 'passed' from scaler parameters
     if 'passed' in df.columns:
         df = df.drop('passed', axis=1)
-    for i in df:
+    for i in df.columns:
         col = df[i]
         if np.max(col) > 6:
-            scaler_params['large'][i] = (max(col), np.mean(col))
+            scaler_params['large'][i] = (np.max(col), np.mean(col))
         else:
             scaler_params['small'][i] = (np.min(col), np.max(col))
     return model, scaler_params
-
 
 def predict_student(data, model, scaler_params):
     """Predict pass probability and category for new student data."""
     # Ensure only expected features are processed
     expected_features = [
-        'school', 'sex', 'age', 'address', 'famsize', 'Pstatus', 'Medu', 'Fedu',
+        'school', 'gender', 'age', 'address', 'famsize', 'Pstatus', 'Medu', 'Fedu',
         'Mjob', 'Fjob', 'reason', 'guardian', 'traveltime', 'studytime', 'failures',
         'schoolsup', 'famsup', 'paid', 'activities', 'nursery', 'higher', 'internet',
         'romantic', 'famrel', 'freetime', 'goout', 'Dalc', 'Walc', 'health', 'absences'
     ]
     data = numerical_data(data.copy())
-    # Drop any unexpected columns, including 'passed'
+    # Drop any unexpected columns
     data = data[[col for col in data.columns if col in expected_features]]
     # Ensure all expected features are present
     for feature in expected_features:

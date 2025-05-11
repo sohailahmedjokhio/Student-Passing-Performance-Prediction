@@ -16,38 +16,38 @@ def index():
     prediction = None
     probability = None
     if request.method == 'POST':
-        # Collect form data
+        # Collect form data with default values for missing inputs
         student_data = {
-            'school': request.form.get('school'),
-            'sex': request.form.get('sex'),
-            'age': int(request.form.get('age')),
-            'address': request.form.get('address'),
-            'famsize': request.form.get('famsize'),
-            'Pstatus': request.form.get('Pstatus'),
-            'Medu': int(request.form.get('Medu')),
-            'Fedu': int(request.form.get('Fedu')),
-            'Mjob': request.form.get('Mjob'),
-            'Fjob': request.form.get('Fjob'),
-            'reason': request.form.get('reason'),
-            'guardian': request.form.get('guardian'),
-            'traveltime': int(request.form.get('traveltime')),
-            'studytime': int(request.form.get('studytime')),
-            'failures': int(request.form.get('failures')),
-            'schoolsup': request.form.get('schoolsup'),
-            'famsup': request.form.get('famsup'),
-            'paid': request.form.get('paid'),
-            'activities': request.form.get('activities'),
-            'nursery': request.form.get('nursery'),
-            'higher': request.form.get('higher'),
-            'internet': request.form.get('internet'),
-            'romantic': request.form.get('romantic'),
-            'famrel': int(request.form.get('famrel')),
-            'freetime': int(request.form.get('freetime')),
-            'goout': int(request.form.get('goout')),
-            'Dalc': int(request.form.get('Dalc')),
-            'Walc': int(request.form.get('Walc')),
-            'health': int(request.form.get('health')),
-            'absences': int(request.form.get('absences'))
+            'school': request.form.get('school', 'GP'),  # Default to 'GP'
+            'gender': request.form.get('gender', 'M'),   # Default to 'M'
+            'age': int(request.form.get('age', 15)),     # Default to 15
+            'address': request.form.get('address', 'U'), # Default to 'U'
+            'famsize': request.form.get('famsize', 'LE3'), # Default to 'LE3'
+            'Pstatus': request.form.get('Pstatus', 'T'), # Default to 'T'
+            'Medu': int(request.form.get('Medu', 0)),    # Default to 0
+            'Fedu': int(request.form.get('Fedu', 0)),    # Default to 0
+            'Mjob': request.form.get('Mjob', 'other'),   # Default to 'other'
+            'Fjob': request.form.get('Fjob', 'other'),   # Default to 'other'
+            'reason': request.form.get('reason', 'other'), # Default to 'other'
+            'guardian': request.form.get('guardian', 'other'), # Default to 'other'
+            'traveltime': int(request.form.get('traveltime', 1)), # Default to 1
+            'studytime': int(request.form.get('studytime', 1)), # Default to 1
+            'failures': int(request.form.get('failures', 0)), # Default to 0
+            'schoolsup': request.form.get('schoolsup', 'no'), # Default to 'no'
+            'famsup': request.form.get('famsup', 'no'),   # Default to 'no'
+            'paid': request.form.get('paid', 'no'),       # Default to 'no'
+            'activities': request.form.get('activities', 'no'), # Default to 'no'
+            'nursery': request.form.get('nursery', 'no'), # Default to 'no'
+            'higher': request.form.get('higher', 'no'),   # Default to 'no'
+            'internet': request.form.get('internet', 'no'), # Default to 'no'
+            'romantic': request.form.get('romantic', 'no'), # Default to 'no'
+            'famrel': int(request.form.get('famrel', 3)), # Default to 3
+            'freetime': int(request.form.get('freetime', 3)), # Default to 3
+            'goout': int(request.form.get('goout', 3)),   # Default to 3
+            'Dalc': int(request.form.get('Dalc', 1)),     # Default to 1
+            'Walc': int(request.form.get('Walc', 1)),     # Default to 1
+            'health': int(request.form.get('health', 3)), # Default to 3
+            'absences': int(request.form.get('absences', 0)) # Default to 0
         }
         # Convert to DataFrame
         new_student = pd.DataFrame([student_data])
