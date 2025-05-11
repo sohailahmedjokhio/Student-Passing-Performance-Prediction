@@ -1,7 +1,7 @@
 # Student Passing Performance Prediction
 
 ## Overview
-The Student Passing Performance Prediction project is an academic initiative designed to predict whether a student will pass their final exam based on a variety of personal, academic, and lifestyle factors. Utilizing a Support Vector Machine (SVM) with a linear kernel, the system provides a probability score and categorizes the likelihood of passing into **Low (<33%)**, **Medium (33-66%)**, or **High (>66%)**. Built with Flask, the web interface allows users to input 30 features and receive real-time predictions. The project leverages the UCI Student Performance Dataset and integrates Python libraries such as scikit-learn, pandas, and matplotlib for modeling and visualization.
+The Student Passing Performance Prediction project is an academic initiative designed to predict whether a student will pass their final exam based on a variety of personal, academic, and lifestyle factors. Utilizing a Support Vector Machine (SVM) with a linear kernel, the system provides a probability score and categorizes the likelihood of passing into **Low (<40%)**, **Medium (40-70%)**, or **High (>70%)**. Built with Flask, the web interface allows users to input 30 features and receive real-time predictions. The project leverages the UCI Student Performance Dataset and integrates Python libraries such as scikit-learn, pandas, and matplotlib for modeling and visualization.
 
 ### One-Line Description
 This project uses an SVM model to predict student exam success based on personal, academic, and lifestyle factors, offering actionable insights for educators.
